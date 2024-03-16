@@ -18,10 +18,12 @@ function Gameboard() {
 
     // Populate cell with mark and check if it already has mark
     const dropMark = (cell, player) => {
-
-        if (!cell.getValue === "?") return;
-
-        cell.textContent = cell.addMark(player);  
+        if (cell.getValue() == "?") { 
+            cell.addMark(player);
+            console.log("Cell marked!");
+            return true;
+        }
+         return false;
     }
     
     return { getBoard, dropMark}
@@ -64,12 +66,16 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     const playRound = (cell) => {
         // Assuming I have the cell dataset 
+
         board.dropMark(cell, getActivePlayer().mark)
+
+       
         switchPlayerTurn();
+        
     }
     
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark};
 }
 
 function ScreenController() {
@@ -86,25 +92,35 @@ function ScreenController() {
         playerTurnDiv.textContent = `${activePlayer.name}'s turn`
 
         //Render cells
-        board.forEach(row => {
-            row.forEach((cell, index) => {
+        
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
                 const cellBtn = document.createElement("button");
                 cellBtn.classList.add("cell");
-                cellBtn.dataset.cell = index;
+                cellBtn.dataset.cell =  `${rowIndex}-${colIndex}`;
                 cellBtn.textContent = cell.getValue();
                 boardDiv.appendChild(cellBtn);
+                
+                
             })
         })
         }
 
 
         function clickHandlerBoard(e) {
-            const selectedCell = e.target.dataset.cell;
+            const selectedCellId = e.target.dataset.cell;    
+            let row, col;
+            if (selectedCellId.includes('-')) { // Row-column format
+            [row, col] = selectedCellId.split('-');
+            } 
 
-            if (!selectedCell) return;
-
-            game.playRound(selectedCell);
-            updateScreen();
+            const actualCell = game.getBoard()[row][col];
+            const marked = game.dropMark(actualCell, game.getActivePlayer().mark);
+            console.log(marked);
+            if (marked) { // Check if dropMark returned (meaning cell was marked)
+                game.playRound(actualCell);
+                updateScreen();
+            }
         }   
         boardDiv.addEventListener("click", clickHandlerBoard);
 
