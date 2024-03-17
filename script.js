@@ -205,6 +205,9 @@ function ScreenController() {
                 dialog.showModal();
                 const activePlayer = game.getActivePlayer(); 
                 winner.textContent = `${activePlayer.name} Wins The Game!`
+            }else if (displayWinner == "draw") {
+                dialog.showModal();
+                winner.textContent = `Draw!`
             }
             updateScreen();
             
