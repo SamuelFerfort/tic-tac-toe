@@ -6,27 +6,27 @@ function Gameboard() {
     const rows = 3;
     const columns = 3;
     const board = [];
-
-    for (let i = 0; i < rows; i++){
+    
+    const createBoard = () => {
+        for (let i = 0; i < rows; i++){
             board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(Cell());
+            for (let j = 0; j < columns; j++) {
+                board[i].push(Cell());
 
+            }
         }
     }
+    createBoard();
     const getBoard = () => board;
 
     // Populate cell with mark and check if it already has mark
     const dropMark = (cell, player) => {
         if (cell.getValue() == "") { 
-            cell.addMark(player);
-            console.log("Cell marked!");
-            return true;
+            cell.addMark(player);   
         }
-         return false;
     }
     
-    return { getBoard, dropMark}
+    return { getBoard, dropMark, createBoard}
 }
 
 function Cell() {
@@ -57,7 +57,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     ];
     
     let activePlayer = players[0];
-
+    
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
@@ -130,23 +130,27 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         
 
         switchPlayerTurn();
-        return "continue";   
+        
+        console.log("hello?")  
     }
     
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark, createBoard: board.createBoard};
 }
 
 function ScreenController() {
     const game = GameController();
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
-
+    const dialog = document.querySelector("dialog");
+    const winner = document.querySelector(".winner")
+    
+    
     const updateScreen = () => {
         boardDiv.textContent = "";
-
-        const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
+        const board = game.getBoard();
+        
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn`
 
@@ -168,23 +172,36 @@ function ScreenController() {
 
         function clickHandlerBoard(e) {
             const selectedCellId = e.target.dataset.cell;    
+            const reset = document.querySelector(".reset");
+            
+            reset.addEventListener("click", () => {
+                game.createBoard();
+                updateScreen();
+                dialog.close();
+            })
             let row, col;
             if (selectedCellId.includes('-')) { // Row-column format
             [row, col] = selectedCellId.split('-');
             } 
 
             const actualCell = game.getBoard()[row][col];
-            const marked = game.dropMark(actualCell, game.getActivePlayer().mark);
             
-            if (marked) { // Check if dropMark returned (meaning cell was marked)
-                game.playRound(actualCell);
-                updateScreen();
+            displayWinner = game.playRound(actualCell);
+            
+            if (displayWinner == "win") {
+                dialog.showModal();
+                const activePlayer = game.getActivePlayer(); 
+                winner.textContent = `${activePlayer.name} WINS THE ROUND`
             }
+            updateScreen();
+            
         }   
         boardDiv.addEventListener("click", clickHandlerBoard);
             
         //Initial render
         updateScreen();
+       
 }
 
-ScreenController();
+const startBtn = document.querySelector(".start");
+startBtn.addEventListener("click",ScreenController);
