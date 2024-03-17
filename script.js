@@ -18,7 +18,7 @@ function Gameboard() {
 
     // Populate cell with mark and check if it already has mark
     const dropMark = (cell, player) => {
-        if (cell.getValue() == "?") { 
+        if (cell.getValue() == "") { 
             cell.addMark(player);
             console.log("Cell marked!");
             return true;
@@ -30,7 +30,7 @@ function Gameboard() {
 }
 
 function Cell() {
-    let value = "?";
+    let value = "";
 
     const addMark = (player) => {
         value = player;
@@ -44,7 +44,7 @@ function Cell() {
 function GameController(playerOneName = "Player One", playerTwoName = "Player Two") {
 
     const board = Gameboard();
-
+    const boardCells = board.getBoard();
     const players = [
         {
             name: playerOneName,
@@ -64,14 +64,72 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     
     const getActivePlayer = () => activePlayer;
 
+    // check for draw 
+
+    const checkForDraw = () => {
+
+
+        for (let i = 0; i < boardCells.length; i++) {
+            for (let j = 0; j < boardCells[i].length; j++) {
+                // If any cell is empty, return false (game is not a draw)
+                if (boardCells[i][j].getValue() == "") {
+                    return false;
+                }
+            }
+        }
+        // If all cells are filled and no winner is detected, return true (game is a draw)
+        return true;
+    };
+
+    const checkForWin = () => {
+        
+        
+        for (let i = 0; i < 3; i++) {
+            
+            // Horizontal win check
+            const horizontalWin = (boardCells[i][0].getValue() === "X" && boardCells[i][1].getValue() === "X" && boardCells[i][2].getValue() === "X") ||
+                                  (boardCells[i][0].getValue() === "O" && boardCells[i][1].getValue() === "O" && boardCells[i][2].getValue() === "O");
+            // Vertical win check
+            const verticalWin = (boardCells[0][i].getValue() === "X" && boardCells[1][i].getValue() === "X" && boardCells[2][i].getValue() === "X") ||
+                                (boardCells[0][i].getValue() === "O" && boardCells[1][i].getValue() === "O" && boardCells[2][i].getValue() === "O");
+                                
+            if (horizontalWin || verticalWin) {
+                console.log("Win detected!");
+                return true;
+            }      
+        
+            }
+        // Check for diagonal win
+        const diagonalWin1 = (boardCells[0][0].getValue() === "X" && boardCells[1][1].getValue() === "X" && boardCells[2][2].getValue() === "X") ||
+        (boardCells[0][0].getValue() === "O" && boardCells[1][1].getValue() === "O" && boardCells[2][2].getValue() === "O");
+        const diagonalWin2 = (boardCells[0][2].getValue() === "X" && boardCells[1][1].getValue() === "X" && boardCells[2][0].getValue() === "X") ||
+        (boardCells[0][2].getValue() === "O" && boardCells[1][1].getValue() === "O" && boardCells[2][0].getValue() === "O");
+        if (diagonalWin1 || diagonalWin2) {
+            console.log("Win detected!");
+            return true;
+        }
+
+        return false; // Game continues
+    }
+
     const playRound = (cell) => {
         // Assuming I have the cell dataset 
 
         board.dropMark(cell, getActivePlayer().mark)
-
        
+        isWin = checkForWin()
+        isDraw = checkForDraw();
+        console.log(isDraw);
+        console.log(isWin);
+        if (isDraw) {
+            return "draw";
+        }
+        if (isWin) {
+            return "win";
+        }
+
         switchPlayerTurn();
-        
+        return "continue";   
     }
     
 
@@ -116,14 +174,14 @@ function ScreenController() {
 
             const actualCell = game.getBoard()[row][col];
             const marked = game.dropMark(actualCell, game.getActivePlayer().mark);
-            console.log(marked);
+            
             if (marked) { // Check if dropMark returned (meaning cell was marked)
                 game.playRound(actualCell);
                 updateScreen();
             }
         }   
         boardDiv.addEventListener("click", clickHandlerBoard);
-
+            
         //Initial render
         updateScreen();
 }
