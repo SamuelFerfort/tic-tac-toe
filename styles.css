@@ -1,15 +1,104 @@
-.board {
-    display: grid;
-    height: 500px;
-    width: 500px;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    border: 1px solid black;
-    gap: 2px;
-    padding: 2px;
-    background-color: yellow;
+:root {
+    --header-height: 100px;
+    --footer-height: 50px;
+    --player1-color: rgb(255, 57, 57); /* Red */
+    --player2-color: rgb(0, 128, 128); /* Teal/Aqua */
 }
 
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    background-color: rgb(240, 240, 240);
+    color: rgb(34, 139, 34);
+}
+
+
+body {
+    height: 100vh;
+    
+}
+.inputs {
+    display: flex;
+    
+    gap: 30px;
+}
+label {
+    font-size: 20px;
+}
+input {
+    height: 30px;
+    padding: 0 10px; /* Add padding for better appearance */
+    background-color: white;
+    border: 1px solid rgb(34, 139, 34); /* Red border */
+    border-radius: 12px;
+    color: rgb(70, 70, 70); /* Dark gray font color */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+/* Adjust hover effect for inputs */
+input:hover {
+    background-color: rgba(255, 57, 57, 0.1); /* Light red on hover */
+    border-color: rgba(255, 57, 57, 0.5); /* Light red border on hover */
+    color: rgb(34, 139, 34); /* Red font color on hover */
+}
+header {
+    display: flex;
+    height: var(--header-height);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+h1, h3, h2 {
+    color: rgb(34, 139, 34);
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    
+    height: calc(100vh - var(--header-height) - var(--footer-height));
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 25px;
+    
+    
+}
+footer {
+    height: var(--footer-height);
+    
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    display: flex;
+}
+.board {
+    display: grid;
+    height: 550px;
+    width: 550px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    
+    border-radius: 8px;
+    
+    
+    
+}
+.reset {
+    padding: 8px 15px;
+    font-size: 18px;
+    border: 2px solid rgb(34, 139, 34);
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 10px;
+    cursor: pointer;
+
+}
 .cell {
 
     display: flex;
@@ -17,7 +106,13 @@
     align-items: center;
     text-align: center;
     font-size: 130px;
-    border: 1px solid grey;
-    background: lightyellow;
+    color: rgba(255, 57, 57, 0.5);
+    border: 1px solid ;
     cursor: pointer;
+    background-color: white;
+    
+}
+.cell:hover,
+button:hover {
+    background-color: rgba(255, 57, 57, 0.1); /* Light red on hover */
 }
