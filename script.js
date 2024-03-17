@@ -1,6 +1,7 @@
 // 
 
-
+let playerOneName = document.getElementById("player1").value || "Player One";
+let playerTwoName = document.getElementById("player2").value || "Player Two";
 function Gameboard() {
 
     const rows = 3;
@@ -139,6 +140,8 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 }
 
 function ScreenController() {
+    
+
     const game = GameController();
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
@@ -150,9 +153,17 @@ function ScreenController() {
         boardDiv.textContent = "";
         const activePlayer = game.getActivePlayer();
         const board = game.getBoard();
+        let playerOneName = document.getElementById("player1").value || "Player One";
+        let playerTwoName = document.getElementById("player2").value || "Player Two";
         
-
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+        if (activePlayer.mark == "X") {
+            activePlayer.name = playerOneName;
+        } else {
+            activePlayer.name = playerTwoName;
+        }
+        console.log(activePlayer.name);
+        console.log(playerOneName);
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn` 
 
         //Render cells
         
@@ -203,5 +214,4 @@ function ScreenController() {
        
 }
 
-const startBtn = document.querySelector(".start");
-startBtn.addEventListener("click",ScreenController);
+ScreenController();
