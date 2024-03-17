@@ -139,3 +139,34 @@ dialog button {
     display: block;
     margin: 0 auto;
 }
+@media only screen and (max-width: 600px) {
+    .inputs {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .input1,
+    .input2 {
+        width: 100%;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .board {
+        width: 90vw;
+        height: 90vw;
+        max-width: 400px; /* Adjust as needed */
+        max-height: 400px; /* Adjust as needed */
+    }
+
+    .cell {
+        font-size: 80px;
+    }
+
+    footer {
+        font-size: 14px;
+    }
+}
