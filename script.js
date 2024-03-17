@@ -121,12 +121,13 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         isDraw = checkForDraw();
         console.log(isDraw);
         console.log(isWin);
-        if (isDraw) {
-            return "draw";
-        }
         if (isWin) {
             return "win";
         }
+        if (isDraw) {
+            return "draw";
+        }
+        
 
         switchPlayerTurn();
         return "continue";   
