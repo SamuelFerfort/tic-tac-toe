@@ -1,4 +1,4 @@
-// 
+let moveCounter = 0;
 
 let playerOneName = document.getElementById("player1").value || "Player One";
 let playerTwoName = document.getElementById("player2").value || "Player Two";
@@ -8,7 +8,11 @@ function Gameboard() {
     const columns = 3;
     const board = [];
     
+    
     const createBoard = () => {
+        
+        moveCounter = 0;
+        console.log("trigger?");
         for (let i = 0; i < rows; i++){
             board[i] = [];
             for (let j = 0; j < columns; j++) {
@@ -67,20 +71,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     // check for draw 
 
-    const checkForDraw = () => {
-
-
-        for (let i = 0; i < boardCells.length; i++) {
-            for (let j = 0; j < boardCells[i].length; j++) {
-                // If any cell is empty, return false (game is not a draw)
-                if (boardCells[i][j].getValue() == "") {
-                    return false;
-                }
-            }
-        }
-        // If all cells are filled and no winner is detected, return true (game is a draw)
-        return true;
-    };
+    
 
     const checkForWin = () => {
         
@@ -112,27 +103,28 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
         return false; // Game continues
     }
-
+    
     const playRound = (cell) => {
         // Assuming I have the cell dataset 
 
         board.dropMark(cell, getActivePlayer().mark)
-       
+        moveCounter++;
+        
         isWin = checkForWin()
-        isDraw = checkForDraw();
-        console.log(isDraw);
+        
+        console.log(moveCounter)
         console.log(isWin);
         if (isWin) {
             return "win";
         }
-        if (isDraw) {
+        if (moveCounter === 9) {
             return "draw";
         }
         
 
         switchPlayerTurn();
         
-        console.log("hello?")  
+         
     }
     
 
@@ -151,6 +143,11 @@ function ScreenController() {
     
     const updateScreen = () => {
         boardDiv.textContent = "";
+        const cellButtons = document.querySelectorAll(".cell");
+        cellButtons.forEach(button => {
+            button.removeEventListener("click", clickHandlerBoard);
+        });
+    
         const activePlayer = game.getActivePlayer();
         const board = game.getBoard();
         let playerOneName = document.getElementById("player1").value || "Player One";
@@ -177,21 +174,24 @@ function ScreenController() {
                 
                 
             })
-        })
-        }
-
-
-        function clickHandlerBoard(e) {
-            const selectedCellId = e.target.dataset.cell;    
-            const reset = document.querySelectorAll(".reset");
+        })}
+        
+        const reset = document.querySelectorAll(".reset");
             
             reset.forEach(button => {
                 button.addEventListener("click", () => {
                 game.createBoard();
                 dialog.close();
-                ScreenController();
+                updateScreen();
                 
             })});
+        
+
+        boardDiv.addEventListener("click", clickHandlerBoard);
+
+        function clickHandlerBoard(e) {
+            const selectedCellId = e.target.dataset.cell;    
+            
             let row, col;
             if (selectedCellId.includes('-')) { // Row-column format
             [row, col] = selectedCellId.split('-');
@@ -212,7 +212,7 @@ function ScreenController() {
             updateScreen();
             
         }   
-        boardDiv.addEventListener("click", clickHandlerBoard);
+       
             
         //Initial render
         updateScreen();
