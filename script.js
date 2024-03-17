@@ -61,14 +61,6 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
-        
-        if (activePlayer === players[0]) {
-            document.body.classList.remove('player2-turn');
-            document.body.classList.add('player1-turn');
-        } else {
-            document.body.classList.remove('player1-turn');
-            document.body.classList.add('player2-turn');
-        }
     }
     
     const getActivePlayer = () => activePlayer;
@@ -191,13 +183,15 @@ function ScreenController() {
 
         function clickHandlerBoard(e) {
             const selectedCellId = e.target.dataset.cell;    
-            const reset = document.querySelector(".reset");
+            const reset = document.querySelectorAll(".reset");
             
-            reset.addEventListener("click", () => {
+            reset.forEach(button => {
+                button.addEventListener("click", () => {
                 game.createBoard();
-                updateScreen();
                 dialog.close();
-            })
+                ScreenController();
+                
+            })});
             let row, col;
             if (selectedCellId.includes('-')) { // Row-column format
             [row, col] = selectedCellId.split('-');
@@ -210,7 +204,7 @@ function ScreenController() {
             if (displayWinner == "win") {
                 dialog.showModal();
                 const activePlayer = game.getActivePlayer(); 
-                winner.textContent = `${activePlayer.name} WINS THE ROUND`
+                winner.textContent = `${activePlayer.name} Wins The Game!`
             }
             updateScreen();
             
