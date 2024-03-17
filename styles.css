@@ -142,31 +142,33 @@ dialog button {
 @media only screen and (max-width: 600px) {
     .inputs {
         flex-direction: column;
-        gap: 15px;
+        align-items: center; /* Center the input fields */
     }
 
     .input1,
     .input2 {
-        width: 100%;
+        width: 80%; /* Adjust width as needed */
     }
 
     .container {
         flex-direction: column;
-        gap: 15px;
+        align-items: center; /* Center the board and button */
     }
 
     .board {
         width: 90vw;
-        height: 90vw;
-        max-width: 400px; /* Adjust as needed */
-        max-height: 400px; /* Adjust as needed */
+        max-width: 300px; /* Adjust as needed */
+        height: 300px; /* Allow height to adjust based on content */
     }
 
     .cell {
-        font-size: 80px;
+        font-size: 50px; /* Adjust font size as needed */
     }
 
     footer {
-        font-size: 14px;
+        font-size: 8px; /* Adjust font size as needed */
+    }
+    header {
+        font-size: 15px;
     }
 }
