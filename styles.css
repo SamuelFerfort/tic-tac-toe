@@ -96,19 +96,17 @@ footer {
     border: 6px solid #112A46
 }
 .reset {
-    padding: 8px 15px;
-    font-size: 18px;
+    padding: 10px 20px;
+    font-size: 20px;
     border: 2px solid rgb(17, 42, 70);
     border-radius: 20px;
     background-color: white;
     margin-top: 10px;
     cursor: pointer;
+    font-weight: bold;
 
 }
 .container .reset {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px 20px;
     margin-top: 18px;
 }
 .cell {
