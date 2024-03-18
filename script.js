@@ -1,7 +1,7 @@
 let moveCounter = 0;
 
-let playerOneName = document.getElementById("player1").value || "Player One";
-let playerTwoName = document.getElementById("player2").value || "Player Two";
+let playerOneName = document.getElementById("player1").value || "Player 1";
+let playerTwoName = document.getElementById("player2").value || "Player 2";
 function Gameboard() {
 
     const rows = 3;
@@ -152,8 +152,8 @@ function ScreenController() {
     
         const activePlayer = game.getActivePlayer();
         const board = game.getBoard();
-        let playerOneName = document.getElementById("player1").value || "Player One";
-        let playerTwoName = document.getElementById("player2").value || "Player Two";
+        let playerOneName = document.getElementById("player1").value || "Player 1";
+        let playerTwoName = document.getElementById("player2").value || "Player 2";
         
         if (activePlayer.mark == "X") {
             activePlayer.name = playerOneName;
