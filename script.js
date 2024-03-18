@@ -27,10 +27,12 @@ function Gameboard() {
     // Populate cell with mark and check if it already has mark
     const dropMark = (cell, player) => {
         if (cell.getValue() == "") { 
-            cell.addMark(player);   
+            cell.addMark(player);
+            return true   
         }
+        return false
     }
-    
+
     return { getBoard, dropMark, createBoard}
 }
 
@@ -128,7 +130,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     }
     
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark, createBoard: board.createBoard};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark, createBoard: board.createBoard,switchPlayerTurn};
 }
 
 function ScreenController() {
@@ -182,7 +184,12 @@ function ScreenController() {
                 button.addEventListener("click", () => {
                 game.createBoard();
                 dialog.close();
-                updateScreen();
+                const activePlayer = game.getActivePlayer();
+                if (activePlayer.mark == "O") {
+                    
+                    game.switchPlayerTurn();
+                }   
+                updateScreen()
                 
             })});
         
@@ -198,12 +205,16 @@ function ScreenController() {
             } 
 
             const actualCell = game.getBoard()[row][col];
+            const activePlayer = game.getActivePlayer(); 
+            isAlreadyMarked = game.dropMark(actualCell, activePlayer.mark);
+            if (isAlreadyMarked) {
+                displayWinner = game.playRound(actualCell);
+            }
             
-            displayWinner = game.playRound(actualCell);
             
             if (displayWinner == "win") {
                 dialog.showModal();
-                const activePlayer = game.getActivePlayer(); 
+                
                 winner.textContent = `${activePlayer.name} Wins The Game!`
             }else if (displayWinner == "draw") {
                 dialog.showModal();
