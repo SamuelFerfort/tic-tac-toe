@@ -199,3 +199,47 @@ dialog button {
 .cell:nth-child(3n) {
   border-right: none; /* Remove right border for every third cell */
 }
+
+/* Move History Styles */
+#move-history-container {
+  width: 80%; /* Or a fixed width like 400px, adjust as needed */
+  max-width: 450px; /* Ensure it doesn't get too wide on larger screens */
+  margin: 20px auto; /* Centered with top/bottom margin */
+  padding: 15px;
+  background-color: #ffffff; /* White background to stand out a bit */
+  border: 1px solid #112a46; /* Using the primary dark blue for border */
+  border-radius: 8px; /* Consistent with board's border-radius */
+  max-height: 200px; /* Max height before scrolling */
+  overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+#move-history-container h3 {
+  /* h3 styles are already defined globally, but we can override if needed */
+  /* color: rgb(17, 42, 70); */ /* Already set globally */
+  /* font-weight: bold; */ /* Already set globally */
+  font-size: 1.2em; /* Slightly larger title */
+  margin-bottom: 10px;
+  padding-bottom: 5px; /* Space before the list starts */
+  border-bottom: 1px solid #eeeeee; /* Separator line for the title */
+  background-color: inherit; /* Ensure h3 background matches container */
+}
+
+#move-history-container ul {
+  list-style-type: none; /* Remove default bullet points */
+  padding-left: 0; /* Remove default padding for ul */
+  margin: 0; /* Reset default margin for ul */
+  background-color: inherit; /* Ensure ul background matches container */
+}
+
+#move-history-container li {
+  padding: 8px 5px; /* Padding for each list item */
+  font-size: 0.9em; /* Slightly smaller font for list items for density */
+  color: #333333; /* Dark grey for readability */
+  border-bottom: 1px dotted #dddddd; /* Dotted separator for items */
+  background-color: inherit; /* Ensure li background matches container */
+}
+
+#move-history-container li:last-child {
+  border-bottom: none; /* Remove border from the last item */
+}

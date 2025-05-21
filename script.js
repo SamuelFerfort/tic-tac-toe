@@ -64,12 +64,15 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     ];
     
     let activePlayer = players[0];
-    
+    let moveHistory = []; // Initialize moveHistory
+
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
     
     const getActivePlayer = () => activePlayer;
+
+    const getMoveHistory = () => moveHistory; // Add getMoveHistory function
 
     // check for draw 
 
@@ -106,11 +109,20 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         return false; // Game continues
     }
     
-    const playRound = (cell) => {
+    const playRound = (cell, row, col) => { // Add row and col parameters
         // Assuming I have the cell dataset 
 
         board.dropMark(cell, getActivePlayer().mark)
         moveCounter++;
+
+        // Record move
+        const move = {
+            playerName: getActivePlayer().name,
+            mark: getActivePlayer().mark,
+            row: parseInt(row), // Ensure row and col are numbers
+            col: parseInt(col)
+        };
+        moveHistory.push(move);
         
         isWin = checkForWin()
         
@@ -129,8 +141,14 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
          
     }
     
+    // Modify createBoard to clear moveHistory
+    const originalCreateBoard = board.createBoard;
+    const createBoardWithHistoryClear = () => {
+        originalCreateBoard();
+        moveHistory = []; // Clear move history
+    }
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark, createBoard: board.createBoard,switchPlayerTurn};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, dropMark: board.dropMark, createBoard: createBoardWithHistoryClear, switchPlayerTurn, getMoveHistory}; // Add getMoveHistory to returned object
 }
 
 function ScreenController() {
@@ -140,7 +158,8 @@ function ScreenController() {
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
     const dialog = document.querySelector("dialog");
-    const winner = document.querySelector(".winner")
+    const winner = document.querySelector(".winner");
+    const moveHistoryContainer = document.getElementById("move-history-container"); // Get reference to move history container
     
     
     const updateScreen = () => {
@@ -176,7 +195,28 @@ function ScreenController() {
                 
                 
             })
-        })}
+        });
+
+        // Update move history display
+        if (moveHistoryContainer) { // Check if the container exists
+            moveHistoryContainer.innerHTML = ""; // Clear previous history
+            const moves = game.getMoveHistory();
+            if (moves && moves.length > 0) {
+                const historyTitle = document.createElement("h3");
+                historyTitle.textContent = "Move History:";
+                moveHistoryContainer.appendChild(historyTitle);
+
+                const ul = document.createElement("ul");
+                moves.forEach(move => {
+                    const li = document.createElement("li");
+                    // Adjust row and col by +1 for display as they are 0-indexed
+                    li.textContent = `${move.playerName} (${move.mark}) played at Row ${move.row + 1}, Col ${move.col + 1}`;
+                    ul.appendChild(li);
+                });
+                moveHistoryContainer.appendChild(ul);
+            }
+        }
+    }
         
         const reset = document.querySelectorAll(".reset");
             
@@ -208,7 +248,8 @@ function ScreenController() {
             const activePlayer = game.getActivePlayer(); 
             isAlreadyMarked = game.dropMark(actualCell, activePlayer.mark);
             if (isAlreadyMarked) {
-                displayWinner = game.playRound(actualCell);
+                // Pass row and col to playRound
+                displayWinner = game.playRound(actualCell, row, col); 
             }
             
             
